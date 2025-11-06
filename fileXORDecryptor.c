@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 
-
 unsigned char *createPiCollection (int length) {
     const char *fileName = "billion-pi.txt";
     FILE *f = fopen(fileName, "r");
@@ -18,12 +17,13 @@ unsigned char *createPiCollection (int length) {
         //Add character to collection as int, increment digitsRead
         key[digitsRead++] = ch - '0';
     }
+
+    fclose(f);
     printf("Pi collection: ");
     for (size_t i = 0; i < digitsRead; i++) {
         printf("%d", key[i]); // print as decimal digit
     }
     printf("\n");
-    fclose(f);
     return key;
 }
 
@@ -31,20 +31,23 @@ int main (int argc, char *argv[]){
     
     //Check if enough arguments
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s <string>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <hex_string>\n", argv[0]);
         return 1;
     }
 
-    unsigned char *text = (unsigned char *)argv[1];
+    char *hex = argv[1];
+    size_t hexLen = strlen(hex)/2;
+    // allocate space to hold as many digits as the hex length
+    unsigned char *pi = malloc(hexLen);
+    pi = createPiCollection(hexLen);
 
-    size_t textLen = strlen((char*)text);
-    // allocate space to hold as many digits as the text length
-    unsigned char *pi = malloc(textLen);
-    pi = createPiCollection(textLen);
+    // Convert hex string to bytes
+    for (size_t i = 0; i <hexLen; i++)
+        sscanf(hex + 2*1, "%2hhx", &pi[i]);
 
-    for (size_t i = 0; i < textLen; i++) {
-        unsigned char result = text[i] ^ pi[i];
-        printf("%02x", result);
+    for (size_t i = 0; i < hexLen; i++) {
+        unsigned char result = hex[i] ^ pi[i];
+        putchar(result);
     }
     printf("\n");
     return 0;
