@@ -39,7 +39,7 @@ int main (int argc, char *argv[]){
 
     size_t textLen = strlen((char*)text);
     // allocate space to hold as many digits as the text length
-    unsigned char *pi = malloc(textLen);
+    unsigned char *data = malloc(textLen);
     pi = createPiCollection(textLen);
 
     for (size_t i = 0; i < textLen; i++) {
