@@ -1,0 +1,46 @@
+#include <sys/socket.h> //network api functions
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+int main(int argc, char **argv)
+{
+    if(argc != 3){printf("Usage: ./portscan IPv4 port"); exit;};
+    char *ip = argv[1];
+    int port = atoi(argv[2]);
+
+    struct sockaddr_in remote; //default structure for a socket address for internet connect
+    int sfd = socket(AF_INET, SOCK_STREAM, 0);//socket file descriptor = socket(AF_INET = IPv4 internet protocol, SOCK_STREAM = TCP connect, 0 = default protocol)
+    if(sfd < 0) //on error, socket() returns -1
+    {
+        perror("socket() error");
+        return -1;
+    }
+
+    memset(&remote, sizeof(remote), 0);//fills out structure as zero, prevent leftover trash
+
+    //sin_family = socket family group (IPv4, IPv6, etc), sin_port = socket internet port
+    remote.sin_family = AF_INET; //set to internet connection
+    remote.sin_port = htons(port); //htons: convert from host byte order to network byte order (big vs little endian issue)
+
+    if(inet_aton(ip, &remote.sin_addr) == 0) //converts from IPv4 to binary form(network byte order) and stores in second argument (struct); returns 0 if IP invalid
+    {
+        perror("not a valid ip");
+        return -1;
+    }
+
+    printf("Scanning %s, port %i... \n", ip, port);
+
+    int ret = connect(sfd, (struct sockaddr *) &remote, sizeof(struct sockaddr_in)); // connect(descriptor, address struct, length of address)
+
+    if(ret < 0) //on error, connect() returns -1
+    {
+        perror("connect() error");
+        return -1;
+    }
+    printf("Port open \n");
+}
