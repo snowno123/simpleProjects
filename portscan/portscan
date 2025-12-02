@@ -39,8 +39,10 @@ int main(int argc, char **argv)
 
     if(ret < 0) //on error, connect() returns -1
     {
-        perror("connect() error");
-        return -1;
+        printf("Port closed \n")
     }
-    printf("Port open \n");
+    else
+    {
+        printf("Port open \n");
+    }
 }
