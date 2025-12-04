@@ -12,6 +12,7 @@ int main(int argc, char **argv)
     if(argc != 3){printf("Usage: ./portscan IPv4 port"); exit;};
     char *ip = argv[1];
     int port = atoi(argv[2]);
+    //checks for invalid ip done by inet_aton
 
     struct sockaddr_in remote; //default structure for a socket address for internet connect
     int sfd = socket(AF_INET, SOCK_STREAM, 0);//socket file descriptor = socket(AF_INET = IPv4 internet protocol, SOCK_STREAM = TCP connect, 0 = default protocol)
@@ -27,8 +28,10 @@ int main(int argc, char **argv)
     remote.sin_family = AF_INET; //set to internet connection
     remote.sin_port = htons(port); //htons: convert from host byte order to network byte order (big vs little endian issue)
 
+
     if(inet_aton(ip, &remote.sin_addr) == 0) //converts from IPv4 to binary form(network byte order) and stores in second argument (struct); returns 0 if IP invalid
     {
+        //inet_aton returns 0 if invalid ip
         perror("not a valid ip");
         return -1;
     }
