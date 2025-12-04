@@ -12,6 +12,7 @@ int main(int argc, char **argv)
     if(argc != 3){printf("Usage: ./portscan IPv4 port"); exit;};
     char *ip = argv[1];
     int port = atoi(argv[2]);
+    if(port > 65535 || port < 1) { printf("port must be 1-65,535"); return -1};
     //checks for invalid ip done by inet_aton
 
     struct sockaddr_in remote; //default structure for a socket address for internet connect
