@@ -66,6 +66,7 @@ int main(int argc, char **argv)
     //3. Check service assignment :: iterate through ports.csv file and check for an assigned service
     const char *service = csvServiceDetect(port);
     printf("Port %i assigned service: %s\n", port, service);
+    close(sfd);
     return 0;
 }
 
