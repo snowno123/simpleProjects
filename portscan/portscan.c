@@ -121,7 +121,6 @@ char *grabBanner(int sfd, int port)
     //if no data or error recieved: 0: no data recieved or <0: error 
     if(dataLength <= 0) 
     {
-        printf("No Banner received\n");
         return NULL;
     }
 
