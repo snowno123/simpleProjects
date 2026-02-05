@@ -66,6 +66,7 @@ int main(int argc, char **argv)
     //3. Check service assignment :: iterate through ports.csv file and check for an assigned service
     const char *service = csvServiceDetect(port);
     printf("Port %i assigned service: %s\n", port, service);
+    close(sfd);
     return 0;
 }
 
@@ -120,7 +121,6 @@ char *grabBanner(int sfd, int port)
     //if no data or error recieved: 0: no data recieved or <0: error 
     if(dataLength <= 0) 
     {
-        printf("No Banner received\n");
         return NULL;
     }
 
